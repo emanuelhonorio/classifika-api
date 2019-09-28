@@ -1,0 +1,1 @@
+ALTER TABLE anuncio ADD COLUMN data_expiracao DATETIME NOT NULL;

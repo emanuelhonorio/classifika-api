@@ -1,0 +1,2 @@
+ALTER TABLE foto DROP COLUMN nome;
+ALTER TABLE foto ADD COLUMN arquivo BLOB;
