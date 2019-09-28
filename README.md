@@ -8,7 +8,7 @@ Importante: O Heroku derruba a aplicação após alguns minutos de inatividade, 
 
 Você pode acessar o projeto no Heroku [clicando aqui](https://classifika-ui.herokuapp.com)
 
-#Equipe
+## Equipe
 1710019819 | ALEXANDRE BRUNO PEREIRA DIAS | alexbpdias@gmail.com
 
 1710018873 | EMANUEL HONORIO PONTES DE ALMEIDA | emanuelh.dev@gmail.com
