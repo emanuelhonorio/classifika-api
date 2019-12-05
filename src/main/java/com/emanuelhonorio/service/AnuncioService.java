@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
@@ -31,6 +32,7 @@ import com.emanuelhonorio.service.mapper.AnuncioMapper;
 import com.querydsl.core.BooleanBuilder;
 
 @Service
+@Transactional
 public class AnuncioService {
 
 	@Autowired
@@ -72,9 +74,13 @@ public class AnuncioService {
 		return anuncio;
 	}
 
-	public void excluirAnuncio(Long anuncioId, Usuario usuarioOwner) {
+	public void excluirAnuncio(Long anuncioId, Usuario usuario) {
 		Anuncio anuncio = buscarPeloId(anuncioId);
-		verificarAnuncioPertenceAoUsuario(anuncio, usuarioOwner);
+		
+		if (!usuario.isAdmin()) {
+			verificarAnuncioPertenceAoUsuario(anuncio, usuario);
+		}
+		
 		anuncioRepository.deleteById(anuncioId);
 	}
 
@@ -86,20 +92,26 @@ public class AnuncioService {
 		return anuncioOpt.get();
 	}
 
-	public void toggleAtivo(Long anuncioId, Usuario usuarioOwner) {
+	public void toggleAtivo(Long anuncioId, Usuario usuario) {
 		Anuncio anuncio = buscarPeloId(anuncioId);
-		verificarAnuncioPertenceAoUsuario(anuncio, usuarioOwner);
+		
+		if (!usuario.isAdmin()) {
+			verificarAnuncioPertenceAoUsuario(anuncio, usuario);
+		}
 		
 		anuncio.setAtivo(!anuncio.isAtivo());
 		anuncioRepository.save(anuncio);
 	}
 
-	public Anuncio atualizarAnuncio(Long anuncioId, @Valid AnuncioDTO anuncioDTO, Usuario usuarioOwner) {
+	public Anuncio atualizarAnuncio(Long anuncioId, @Valid AnuncioDTO anuncioDTO, Usuario usuario) {
 		Anuncio anuncio = buscarPeloId(anuncioId);
-		verificarAnuncioPertenceAoUsuario(anuncio, usuarioOwner);
-		verificarContatoPertenceAoUsuario(anuncio.getContato(), usuarioOwner);
 		
+		if (!usuario.isAdmin()) {
+			verificarAnuncioPertenceAoUsuario(anuncio, usuario);
+			verificarContatoPertenceAoUsuario(anuncio.getContato(), usuario);
+		}
 		
+		anuncioDTO.setAtivo(anuncio.isAtivo());
 		anuncioDTO.setDataExpiracao(anuncio.getDataExpiracao());
 		anuncioDTO.setAtualizadoEm(anuncio.getAtualizadoEm());
 		anuncioDTO.setCriadoEm(anuncio.getCriadoEm());
@@ -112,9 +124,13 @@ public class AnuncioService {
 	}
 	
 
-	public Anuncio uparFotos(Long anuncioId, Usuario usuarioOwner, MultipartFile[] fotos) throws IOException {
+	public Anuncio uparFotos(Long anuncioId, Usuario usuario, MultipartFile[] fotos) throws IOException {
 		Anuncio anuncio = buscarPeloId(anuncioId);
-		verificarAnuncioPertenceAoUsuario(anuncio, usuarioOwner);
+				
+		if (!usuario.isAdmin()) {
+			verificarAnuncioPertenceAoUsuario(anuncio, usuario);
+		}		
+		fotoRepository.deleteAllByAnuncioId(anuncio.getId());
 		
 		List<Foto> fotosSalvas = new ArrayList<>();
 		
@@ -149,14 +165,14 @@ public class AnuncioService {
 		}
 	}
 
-	private void verificarAnuncioPertenceAoUsuario(Anuncio anuncio, Usuario usuarioOwner) throws ResourceOwnerException {
-		if (anuncio.getUsuario().getId() != usuarioOwner.getId()) { // Usuário não é o dono do recurso
+	private void verificarAnuncioPertenceAoUsuario(Anuncio anuncio, Usuario publicador) throws ResourceOwnerException {
+		if (!publicador.equals(anuncio.getUsuario())) {
 			throw new ResourceOwnerException();
 		}
 	}
 	
-	private void verificarFotoPertenceAoUsuario(Foto foto, Usuario usuarioOwner) throws ResourceOwnerException {		
-		if (foto.getAnuncio().getUsuario().getId() != usuarioOwner.getId()) { // Usuário não é o dono do recurso
+	private void verificarFotoPertenceAoUsuario(Foto foto, Usuario publicador) throws ResourceOwnerException {		
+		if (!publicador.equals(foto.getAnuncio().getUsuario())) {
 			throw new ResourceOwnerException();
 		}
 	}

@@ -10,7 +10,7 @@ public class UsuarioMapper {
 	public static UsuarioDTO usuarioToUsuarioDTO(Usuario usuario) {
 		UsuarioDTO usuarioDTO = new UsuarioDTO();
 		if (usuario != null) {
-			BeanUtils.copyProperties(usuario, usuarioDTO, "senha");
+			BeanUtils.copyProperties(usuario, usuarioDTO);
 		}
 		return usuarioDTO;
 	}

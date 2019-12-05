@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.emanuelhonorio.model.Role;
 import com.emanuelhonorio.model.Usuario;
 import com.emanuelhonorio.repository.UsuarioRepository;
 
@@ -31,12 +32,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			throw new UsernameNotFoundException("email inválido");
 		}
 		
-		return new User(usuarioOpt.get().getEmail(), usuarioOpt.get().getSenha(), getAuthorities());
+		return new User(usuarioOpt.get().getEmail(), usuarioOpt.get().getSenha(), getAuthorities(usuarioOpt.get()));
 	}
 
-	private Collection<? extends GrantedAuthority> getAuthorities() {
+	private Collection<? extends GrantedAuthority> getAuthorities(Usuario usuario) {
 		Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+		
+		for (Role permissao : usuario.getPermissoes()) {
+			authorities.add(new SimpleGrantedAuthority(permissao.getNome()));
+		}
+		
 		return authorities;
 	}
 

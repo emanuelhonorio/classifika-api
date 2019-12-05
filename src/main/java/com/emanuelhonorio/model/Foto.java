@@ -12,8 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -37,10 +35,6 @@ public class Foto implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "id_anuncio")
 	private Anuncio anuncio;
-
-	@Transient
-	@Value("${classifika.domain}")
-	private String APPLICATION_DOMAIN;
 
 	public Foto() {
 	}
@@ -76,7 +70,8 @@ public class Foto implements Serializable {
 	}
 
 	public String getUrl() {
-		return "http://localhost:8080" + "/anuncios/img/" + this.id;
+		return "https://classifika-api.herokuapp.com" + "/anuncios/img/" + this.id;
+		// return "http://localhost:8080" + "/anuncios/img/" + this.id;
 	}
 
 	public void setUrl(String url) {

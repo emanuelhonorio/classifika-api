@@ -2,16 +2,22 @@ package com.emanuelhonorio.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "usuario")
@@ -41,9 +47,23 @@ public class Usuario implements Serializable {
 	@Column(name = "criado_em", nullable = false)
 	private LocalDateTime criadoEm;
 
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "usuario_role", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_role"))
+	private Set<Role> permissoes = new HashSet<>();
+
 	@PrePersist
 	public void prePersist() {
 		this.criadoEm = LocalDateTime.now();
+	}
+	
+	@Transient
+	public boolean isAdmin() {
+		for (Role permissao : permissoes) {
+			if (permissao.getNome().equals("ROLE_ADMIN")) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public Long getId() {
@@ -100,6 +120,14 @@ public class Usuario implements Serializable {
 
 	public void setContatos(Set<Contato> contatos) {
 		this.contatos = contatos;
+	}
+
+	public Set<Role> getPermissoes() {
+		return permissoes;
+	}
+
+	public void setPermissoes(Set<Role> permissoes) {
+		this.permissoes = permissoes;
 	}
 
 	@Override

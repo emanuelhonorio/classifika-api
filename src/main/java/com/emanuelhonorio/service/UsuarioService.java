@@ -18,14 +18,14 @@ public class UsuarioService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
-	public Usuario register(UsuarioDTO usuarioDTO, String senha) {
+	public Usuario register(UsuarioDTO usuarioDTO) {
 		
 		if ( usuarioRepository.findByEmailIgnoreCase(usuarioDTO.getEmail()).isPresent() ) {
 			throw new EmailAlreadyUsedException();
 		}
 		
 		Usuario novoUsuario = new Usuario();
-		String encryptedPassword = passwordEncoder.encode(senha);
+		String encryptedPassword = passwordEncoder.encode(usuarioDTO.getSenha());
 		
 		novoUsuario.setApelido(usuarioDTO.getApelido());
 		novoUsuario.setEmail(usuarioDTO.getEmail());
