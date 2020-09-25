@@ -71,7 +71,7 @@ public class Foto implements Serializable {
 
 	public String getUrl() {
 		return "https://classifika-api.herokuapp.com" + "/anuncios/img/" + this.id;
-		// return "http://localhost:8080" + "/anuncios/img/" + this.id;
+		//return "http://localhost:8080" + "/anuncios/img/" + this.id;
 	}
 
 	public void setUrl(String url) {

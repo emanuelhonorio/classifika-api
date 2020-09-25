@@ -72,13 +72,13 @@ public class Anuncio implements Serializable {
 	@PrePersist
 	public void prePersist() {
 		this.criadoEm = LocalDateTime.now();
-		this.dataExpiracao = this.criadoEm.plusDays(30);
+		this.dataExpiracao = this.criadoEm.plusDays(90);
 	}
 
 	@PreUpdate
 	public void preUpdate() {
 		this.atualizadoEm = LocalDateTime.now();
-		this.dataExpiracao = this.criadoEm.plusDays(30);
+		this.dataExpiracao = this.criadoEm.plusDays(90);
 	}
 
 	public Long getId() {

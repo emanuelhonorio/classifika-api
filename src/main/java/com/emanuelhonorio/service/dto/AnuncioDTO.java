@@ -160,7 +160,7 @@ public class AnuncioDTO {
 	}
 
 	public boolean isExpirado() {
-		return expirado;
+		return this.dataExpiracao.isBefore(LocalDateTime.now());
 	}
 
 	public void setExpirado(boolean expirado) {
