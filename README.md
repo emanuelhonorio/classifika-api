@@ -7,6 +7,8 @@ Com uma interface elegante, construída com tecnologia inovadora que te possibil
 
 Link : https://classifika-ui.herokuapp.com/
 
+![Diagrama de casos de uso](docs/demo.gif?raw=true "Diagrama de casos de uso")
+
 ## Front-end Repository
 
 Link: https://github.com/emanuelhonorio/classifika-ui
@@ -84,3 +86,17 @@ Link: https://github.com/emanuelhonorio/classifika-ui
  ┃ ┃ ┃ ┗ 📂emanuelhonorio
  ┃ ┃ ┃ ┃ ┗ 📜ClassifikaApplicationTests.java
 ```
+
+## Documentation
+
+### Diagrama de casos de uso
+
+![Diagrama de casos de uso](docs/diagrama_casos_de_uso.png?raw=true "Diagrama de casos de uso")
+
+### Diagrama de classes
+
+![Diagrama de casos de uso](docs/diagrama_de_classes.png?raw=true "Diagrama de casos de uso")
+
+### Modelo Conceitual
+
+![Diagrama de casos de uso](docs/modelo_conceitual.png?raw=true "Diagrama de casos de uso")
